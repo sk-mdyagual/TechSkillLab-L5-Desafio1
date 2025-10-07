@@ -1,5 +1,6 @@
 package principles;
 
+
 import principles.interfaces.ResultMessage;
 
 class Calculator {
@@ -27,14 +28,18 @@ class Calculator {
         int resta = Calculator.restar(14,4);
         int mult = Calculator.multiplicar(5,6);
 
-        int fact = Calculator.factorial(6);
+        //int fact = Calculator.factorial(6);
 
-        System.out.println("La suma es: "+suma);
-        System.out.println("La resta es: "+resta);
-        System.out.println("La multiplicación es: "+mult);
-        System.out.println("El factorial es: "+fact);
+        //System.out.println("La suma es: "+suma);
+        //System.out.println("La resta es: "+resta);
+        //System.out.println("La multiplicación es: "+mult);
+        //System.out.println("El factorial es: "+fact);
 
         //To-do: Uso de la interfaz funcional Result Message para mostrar prints
+        ResultMessage msgSuma = (op, res) -> String.format("El resultado de %s es: %d", op, res);
+
+        System.out.println(msgSuma.format("suma", suma));
+        ResultMessage.show(msgSuma.format("suma", suma));
 
     }
 }
