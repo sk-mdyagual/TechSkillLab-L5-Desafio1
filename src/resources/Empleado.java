@@ -13,14 +13,15 @@ public class Empleado {
     private LocalDate fechaIng;
     private LocalDate fechaSal;
     private Boolean isActive;
-
+    private String supervisor;
     public Empleado(String nombre,
                     String apellido,
                     String genero,
                     String departamento,
                     String cargo,
                     BigDecimal salario,
-                    LocalDate fechaIng) {
+                    LocalDate fechaIng,
+                    String supervisor) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.genero = genero;
@@ -30,6 +31,7 @@ public class Empleado {
         this.fechaIng = fechaIng;
         this.fechaSal = null;
         this.isActive = true;
+        this.supervisor = supervisor;
     }
 
     public Empleado(String nombre,
@@ -40,7 +42,8 @@ public class Empleado {
                     BigDecimal salario,
                     LocalDate fechaIng,
                     LocalDate fechaSal,
-                    Boolean isActive) {
+                    Boolean isActive,
+                    String supervisor) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.genero = genero;
@@ -50,6 +53,7 @@ public class Empleado {
         this.fechaIng = fechaIng;
         this.fechaSal = fechaSal;
         this.isActive = isActive;
+        this.supervisor = supervisor;
     }
 
     public String getNombre() {
@@ -95,6 +99,8 @@ public class Empleado {
     public void setFechaSal(LocalDate fechaSal) {
         this.fechaSal = fechaSal;
     }
+
+    public String getSupervisor() { return supervisor; }
 
     @Override
     public String toString() {
