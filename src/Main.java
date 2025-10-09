@@ -147,7 +147,8 @@ public class Main {
         empleadoList.add(new Empleado("Cecilia", "Marín", "F", "Informática", "Supervisora TI", new BigDecimal(2000), LocalDate.parse("2020-04-21")));
         empleadoList.add(new Empleado("Edison", "Cáceres", "M", "Informática", "Desarrollador TI", new BigDecimal(1300), LocalDate.parse("2023-07-07")));
         empleadoList.add(new Empleado("María", "Silva", "F", "Contabilidad", "Asistente Contable", new BigDecimal(900), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-09"), false));
-//        empleadoList.add(new Empleado("Cristian", "Roa", "M", "Informática", "Desarrollador back", new BigDecimal(500), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-09"), true));
+        //empleado prueba predicate
+        empleadoList.add(new Empleado("Cristian", "Roa", "M", "Informática", "Desarrollador back", new BigDecimal(500), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-09"), true));
 
     }
 
