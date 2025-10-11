@@ -1,5 +1,6 @@
 package challenge;
 
+
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -16,6 +18,7 @@ public class ChallengeMain {
         customFunctionalInterfaces();
         filterInactiveEmployeesWithSalaryUnder(new BigDecimal(7000));
         mapDepartmentAndSupervisor();
+        printEmployeesFromSpecificDepartment(Employee.Department.IT);
     }
 
     static void customFunctionalInterfaces() {
@@ -87,6 +90,20 @@ public class ChallengeMain {
         var baseEmployees = Utils.generateEmployees();
         var result = transformToDepartmentsMap.apply(baseEmployees);
         System.out.println(result);
+    }
+
+    static void printEmployeesFromSpecificDepartment(Employee.Department department) {
+        System.out.println("\n==========PRINT EMPLOYEES FROM " + department.name() + " DEPARTMENT==========");
+
+        Consumer<List<Employee>> employeesFromDepartmentPrinter = employees -> {
+            employees.forEach(employee -> {
+                if(employee.department().equals(department)){
+                    System.out.println(employee);
+                }
+            });
+        };
+        var baseEmployees = Utils.generateEmployees();
+        employeesFromDepartmentPrinter.accept(baseEmployees);
     }
 }
 
