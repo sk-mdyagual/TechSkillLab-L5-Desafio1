@@ -13,9 +13,11 @@ import java.util.function.Predicate;
 public class ChallengeMain {
     public static void main(String[] args) {
         customFunctionalInterfaces();
-        filterInactiveEmployeesWithSalaryUnder(new BigDecimal(7000));
+        filterActiveEmployeesWithSalaryUnder(new BigDecimal(7000));
         mapDepartmentAndSupervisor();
         printEmployeesFromSpecificDepartment(Employee.Department.IT);
+        printEmployeesFromSpecificDepartment(Employee.Department.DATA);
+        printEmployeesFromSpecificDepartment(Employee.Department.ACCOUNTING);
         sortByLastName();
     }
 
@@ -54,7 +56,7 @@ public class ChallengeMain {
 
     }
 
-    static void filterInactiveEmployeesWithSalaryUnder(BigDecimal minSalary) {
+    static void filterActiveEmployeesWithSalaryUnder(BigDecimal minSalary) {
         System.out.println("\n==========FILTER ACTIVE EMPLOYEES WITH SALARY OVER " + minSalary + "==========");
 
         var baseEmployees = Utils.generateEmployees();
