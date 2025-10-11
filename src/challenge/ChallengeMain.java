@@ -5,10 +5,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -19,6 +16,7 @@ public class ChallengeMain {
         filterInactiveEmployeesWithSalaryUnder(new BigDecimal(7000));
         mapDepartmentAndSupervisor();
         printEmployeesFromSpecificDepartment(Employee.Department.IT);
+        sortByLastName();
     }
 
     static void customFunctionalInterfaces() {
@@ -104,6 +102,15 @@ public class ChallengeMain {
         };
         var baseEmployees = Utils.generateEmployees();
         employeesFromDepartmentPrinter.accept(baseEmployees);
+    }
+
+    static void sortByLastName() {
+        System.out.println("\n==========SORT EMPLOYEES BY LAST NAME==========");
+
+        Comparator<Employee> lastNameComparator = Comparator.comparing(Employee::lastName);
+        var employees = Utils.generateEmployees();
+        employees.sort(lastNameComparator);
+        employees.forEach(System.out::println);
     }
 }
 
