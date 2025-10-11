@@ -5,13 +5,17 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ChallengeMain {
     public static void main(String[] args) {
         customFunctionalInterfaces();
         filterInactiveEmployeesWithSalaryUnder(new BigDecimal(7000));
+        mapDepartmentAndSupervisor();
     }
 
     static void customFunctionalInterfaces() {
@@ -64,4 +68,37 @@ public class ChallengeMain {
         });
         filteredEmployees.forEach(System.out::println);
     }
+
+    static void mapDepartmentAndSupervisor() {
+        System.out.println("\n==========MAP WITH DEPARTMENTS AND SUPERVISOR==========");
+
+        Function<List<Employee>, Map<String, String>> transformToDepartmentsMap = (List<Employee> employees) -> {
+            Map<String, String> departmentsMap = new HashMap<>();
+            employees.forEach(employee -> {
+                departmentsMap.putIfAbsent(employee.department().name(), "N/A");
+
+                if (employee.isSupervisor()) {
+                    departmentsMap.put(employee.department().name(), employee.name() + " " + employee.lastName());
+                }
+            });
+            return departmentsMap;
+        };
+
+        var baseEmployees = Utils.generateEmployees();
+        var result = transformToDepartmentsMap.apply(baseEmployees);
+        System.out.println(result);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
