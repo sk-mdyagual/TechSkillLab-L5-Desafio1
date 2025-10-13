@@ -1,8 +1,8 @@
 import resources.Empleado;
+import resources.EmpleadoFormatter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -10,86 +10,95 @@ import java.util.function.Predicate;
 
 public class Main {
     public static void main(String[] args) {
+
         List<Empleado> empleados = new ArrayList<>();
-        loadEmpleados(empleados);
+        cargarEmpleados(empleados);
 
-        //To-do: Filtrar empleados por un atributo: departamento
-        Predicate<Empleado> deptInfo = empleado -> empleado.getDepartamento().equals("Informática");
+        // 1) Interfaz funcional personalizada: EmpleadoFormatter
+        EmpleadoFormatter formatoNomina = e ->
+                String.format("NÓMINA | %s %s | Dep: %s | Cargo: %s | Salario: %s | Activo: %s",
+                        e.getNombre(), e.getApellido(), e.getDepartamento(), e.getCargo(),
+                        e.getSalario().toPlainString(), e.getIsActive());
 
-        //To-do: Ordenar empleados por un atributo: Nombre
-        Comparator<Empleado> porNombre = Comparator.comparing(empleado -> empleado.getNombre());
+        EmpleadoFormatter formatoFicha = e ->
+                String.format("FICHA | %s %s (%s) | %s | %s | Ing: %s | Sal: %s | Activo: %s",
+                        e.getNombre(), e.getApellido(), e.getGenero(),
+                        e.getDepartamento(), e.getCargo(),
+                        e.getFechaIng(), e.getFechaSal(), e.getIsActive());
 
-        //To-do: Generar un mapa que me permita tener como clave los departamentos y como valor el total de empleados por departamento
-        Function<List<Empleado>, Map<String, Integer>> deptCount = l_empleados -> {
-            Map<String, Integer> total = new HashMap<>();
-            l_empleados.forEach(empleado -> {
-                total.merge(empleado.getDepartamento(), 1, Integer::sum);
-            });
-            return total;
-        };
+        System.out.println("-- Formatos personalizados --");
+        for (Empleado e : empleados) {
+            System.out.println(formatoNomina.format(e));
+            System.out.println(formatoFicha.format(e));
+        }
 
-        //To-do: Mostrar empleados por un consumer: Contratados en determinado mes
-        Consumer<List<Empleado>> empEnero = emps -> {
-            emps.forEach(empleado -> {
-                if(empleado.getFechaIng().getMonth() == Month.JANUARY){
-                    System.out.println(empleado);
+        // 2) Predicate: empleados activos con salario < 700 USD
+        Predicate<Empleado> activosYMenor700 = e -> Boolean.TRUE.equals(e.getIsActive())
+                && e.getSalario().compareTo(new BigDecimal("700")) < 0;
+
+        System.out.println("\n-- Empleados activos con salario < 700 --");
+        for (Empleado e : empleados) {
+            if (activosYMenor700.test(e)) {
+                System.out.println(e.getNombre() + " " + e.getApellido() + " | $" + e.getSalario());
+            }
+        }
+
+        // 3) Function: mapa Departamento -> Supervisor
+        Function<List<Empleado>, Map<String, String>> mapaDeptSupervisor = lista -> {
+            Map<String, String> resultado = new HashMap<>();
+            for (Empleado e : lista) {
+                String cargoLower = e.getCargo().toLowerCase(Locale.ROOT);
+                boolean esSupervisor = cargoLower.contains("supervisor") ||
+                                       cargoLower.contains("jefe") ||
+                                       cargoLower.contains("líder") ||
+                                       cargoLower.contains("lider");
+
+                if (esSupervisor) {
+                    // Guardamos el primero que encontremos por departamento
+                    resultado.putIfAbsent(e.getDepartamento(), e.getNombre() + " " + e.getApellido());
                 }
-            });
+            }
+            return resultado;
         };
 
-        //To-do: Uso de las funciones
+        Map<String, String> deptToSupervisor = mapaDeptSupervisor.apply(empleados);
+        System.out.println("\n-- Mapa Departamento -> Supervisor --");
+        for (Map.Entry<String, String> entry : deptToSupervisor.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
 
-        //1. Predicate
-        System.out.println("Predicate resultado");
-        List<Empleado> infoEmp = new ArrayList<>();
-        empleados.forEach(empleado -> {
-            if(deptInfo.test(empleado)){
-                infoEmp.add(empleado);
+        // 4) Consumer: imprimir empleados de un departamento dado
+        final String departamentoBuscado = "IT"; // cambia este valor para probar
+        Consumer<Empleado> impresor = e ->
+                System.out.println(e.getNombre() + " " + e.getApellido() + " | " + e.getCargo());
+
+        System.out.println("\n-- Empleados del departamento: " + departamentoBuscado + " --");
+        for (Empleado e : empleados) {
+            if (departamentoBuscado.equalsIgnoreCase(e.getDepartamento())) {
+                impresor.accept(e);
+            }
+        }
+
+        // 5) Comparator: ordenar por apellido (alfabético)
+        empleados.sort(new Comparator<Empleado>() {
+            @Override
+            public int compare(Empleado a, Empleado b) {
+                return a.getApellido().compareToIgnoreCase(b.getApellido());
             }
         });
 
-        System.out.println(infoEmp);
-        //2. Comparator
-        System.out.println("Comparator resultado");
-        List<Empleado> empleados1 = new ArrayList<>(List.copyOf(empleados));
-        empleados1.sort(porNombre);
-        System.out.println(empleados1);
-
-        //3. Function
-        System.out.println("Function resultado");
-        Map<String, Integer> totalPorDept = deptCount.apply(empleados);
-        System.out.println(totalPorDept);
-
-        //4. Consumer
-        System.out.println("Consumer resultado");
-        empEnero.accept(empleados);
-
-
+        System.out.println("\n-- Empleados ordenados por apellido --");
+        for (Empleado e : empleados) {
+            System.out.println(e.getApellido() + ", " + e.getNombre());
+        }
     }
 
-    public static void loadEmpleados(List<Empleado> empleadoList){
-        empleadoList.add(new Empleado("María", "Rodríguez", "F", "Contabilidad", "Asistente Contable", new BigDecimal(700), LocalDate.parse("2021-04-01")));
-        empleadoList.add(new Empleado("Juan", "Gutierrez", "M", "Talento Humano", "Reclutador", new BigDecimal(500), LocalDate.parse("2023-03-11"), LocalDate.parse("2024-04-01"), false));
-        empleadoList.add(new Empleado("José", "Albornoz", "M","Contabilidad", "Asistente Contable", new BigDecimal(800), LocalDate.parse("2020-08-15"), LocalDate.parse("2023-05-01"), false));
-        empleadoList.add(new Empleado("Julián", "Flores", "M", "Informática", "Soporte TI", new BigDecimal(800), LocalDate.parse("2023-11-01")));
-        empleadoList.add(new Empleado("Camila", "Mendoza","F", "Informática", "Desarrollador UI/UX", new BigDecimal(1000), LocalDate.parse("2021-07-08")));
-        empleadoList.add(new Empleado("Camilo", "López", "M", "Contabilidad", "Supervisor Contable", new BigDecimal(1500), LocalDate.parse("2020-04-11")));
-        empleadoList.add(new Empleado("Manuel", "Játiva", "M", "Contabilidad", "Asistente Contable", new BigDecimal(850), LocalDate.parse("2023-06-03")));
-        empleadoList.add(new Empleado("Carlos", "Franco", "M", "Talento Humano", "Reclutador", new BigDecimal(650), LocalDate.parse("2023-01-07"), LocalDate.parse("2024-12-09"), false));
-        empleadoList.add(new Empleado("Raúl", "Echeverría", "M", "Informática", "Infraestructura TI", new BigDecimal(950), LocalDate.parse("2020-02-14")));
-        empleadoList.add(new Empleado("Estefanía", "Mendoza", "F", "Talento Humano", "Supervisora TH", new BigDecimal(1600), LocalDate.parse("2021-09-21")));
-        empleadoList.add(new Empleado("Julie", "Flores", "F", "Informática", "Desarrollador", new BigDecimal(1200), LocalDate.parse("2021-12-10")));
-        empleadoList.add(new Empleado("Melissa", "Morocho", "F","Contabilidad", "Asistente Contable", new BigDecimal(820), LocalDate.parse("2022-05-22"), LocalDate.parse("2023-07-09"), false));
-        empleadoList.add(new Empleado("Camila", "Mendez", "F", "Contabilidad", "Asistente Cuentas", new BigDecimal(860), LocalDate.parse("2020-10-01")));
-        empleadoList.add(new Empleado("José", "Rodríguez", "M","Informática", "Tester QA", new BigDecimal(1100), LocalDate.parse("2021-10-01")));
-        empleadoList.add(new Empleado("Esteban", "Gutierrez","M", "Talento Humano", "Reclutador", new BigDecimal(700), LocalDate.parse("2023-04-01")));
-        empleadoList.add(new Empleado("María", "López","F", "Contabilidad", "Asistente Contable", new BigDecimal(840), LocalDate.parse("2020-02-20"), LocalDate.parse("2024-07-15"), false));
-        empleadoList.add(new Empleado("Cecilia", "Marín","F", "Informática", "Supervisora TI", new BigDecimal(2000), LocalDate.parse("2020-04-21")));
-        empleadoList.add(new Empleado("Edison", "Cáceres","M", "Informática", "Desarrollador TI", new BigDecimal(1300), LocalDate.parse("2023-07-07")));
-        empleadoList.add(new Empleado("María", "Silva", "F","Contabilidad", "Asistente Contable", new BigDecimal(900), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-09"), false));
-
+    private static void cargarEmpleados(List<Empleado> lista) {
+        lista.add(new Empleado("Ana", "Zapata", "F", "IT", "Desarrolladora", new BigDecimal("650"), LocalDate.parse("2023-01-10")));
+        lista.add(new Empleado("Bruno", "Alvarez", "M", "IT", "Supervisor de Desarrollo", new BigDecimal("1800"), LocalDate.parse("2020-03-05")));
+        lista.add(new Empleado("Carla", "Moreno", "F", "Ventas", "Vendedora", new BigDecimal("900"), LocalDate.parse("2022-07-01")));
+        lista.add(new Empleado("Diego", "Ortega", "M", "Ventas", "Jefe Comercial", new BigDecimal("2200"), LocalDate.parse("2019-11-20")));
+        lista.add(new Empleado("Elena", "Pérez", "F", "Talento", "Analista", new BigDecimal("700"), LocalDate.parse("2021-02-15")));
+        lista.add(new Empleado("Fabio", "García", "M", "Talento", "Líder de Talento", new BigDecimal("2000"), LocalDate.parse("2018-06-30")));
     }
-
-
-
 }

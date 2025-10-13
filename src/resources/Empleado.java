@@ -14,33 +14,13 @@ public class Empleado {
     private LocalDate fechaSal;
     private Boolean isActive;
 
-    public Empleado(String nombre,
-                    String apellido,
-                    String genero,
-                    String departamento,
-                    String cargo,
-                    BigDecimal salario,
-                    LocalDate fechaIng) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.genero = genero;
-        this.departamento = departamento;
-        this.cargo = cargo;
-        this.salario = salario;
-        this.fechaIng = fechaIng;
-        this.fechaSal = null;
-        this.isActive = true;
+    public Empleado(String nombre, String apellido, String genero, String departamento,
+                    String cargo, BigDecimal salario, LocalDate fechaIng) {
+        this(nombre, apellido, genero, departamento, cargo, salario, fechaIng, null, true);
     }
 
-    public Empleado(String nombre,
-                    String apellido,
-                    String genero,
-                    String departamento,
-                    String cargo,
-                    BigDecimal salario,
-                    LocalDate fechaIng,
-                    LocalDate fechaSal,
-                    Boolean isActive) {
+    public Empleado(String nombre, String apellido, String genero, String departamento,
+                    String cargo, BigDecimal salario, LocalDate fechaIng, LocalDate fechaSal, Boolean isActive) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.genero = genero;
@@ -52,64 +32,30 @@ public class Empleado {
         this.isActive = isActive;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
+    public String getApellido() { return apellido; }
+    public String getGenero() { return genero; }
+    public String getDepartamento() { return departamento; }
+    public String getCargo() { return cargo; }
+    public BigDecimal getSalario() { return salario; }
+    public LocalDate getFechaIng() { return fechaIng; }
+    public LocalDate getFechaSal() { return fechaSal; }
+    public Boolean getIsActive() { return isActive; }
 
-    public String getApellido() {
-        return apellido;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public String getDepartamento() {
-        return departamento;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public BigDecimal getSalario() {
-        return salario;
-    }
-
-    public LocalDate getFechaIng() {
-        return fechaIng;
-    }
-
-    public LocalDate getFechaSal() {
-        return fechaSal;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    public void setFechaSal(LocalDate fechaSal) {
-        this.fechaSal = fechaSal;
-    }
+    public void setIsActive(Boolean active) { this.isActive = active; }
 
     @Override
     public String toString() {
-        return "{" +
-                "nombre: '" + nombre + '\'' +
-                ", apellido: '" + apellido + '\'' +
-                ", genero: '" + genero + '\'' +
-                ", departamento: '" + departamento + '\'' +
-                ", cargo: '" + cargo + '\'' +
-                ", salario: " + salario +
-                ", fechaIng: " + fechaIng +
-                ", fechaSal: " + fechaSal +
-                ", isActive: " + isActive +
-                '}'+"\n";
+        return "Empleado{" +
+                "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", genero='" + genero + '\'' +
+                ", departamento='" + departamento + '\'' +
+                ", cargo='" + cargo + '\'' +
+                ", salario=" + salario +
+                ", fechaIng=" + fechaIng +
+                ", fechaSal=" + fechaSal +
+                ", isActive=" + isActive +
+                '}';
     }
 }
-
-
