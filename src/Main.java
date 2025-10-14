@@ -1,6 +1,8 @@
 import resources.Empleado;
+import principles.interfaces.EmpleadoFormat;
 
 import java.math.BigDecimal;
+import java.text.Collator;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
@@ -13,58 +15,85 @@ public class Main {
         List<Empleado> empleados = new ArrayList<>();
         loadEmpleados(empleados);
 
-        //To-do: Filtrar empleados por un atributo: departamento
-        Predicate<Empleado> deptInfo = empleado -> empleado.getDepartamento().equals("Informática");
+        EmpleadoFormat formatoNomina = e ->
+                String.format("%s %s | %s | %s | $%,.2f",
+                        e.getNombre(), e.getApellido(),
+                        e.getDepartamento(), e.getCargo(),
+                        e.getSalario());
 
-        //To-do: Ordenar empleados por un atributo: Nombre
-        Comparator<Empleado> porNombre = Comparator.comparing(empleado -> empleado.getNombre());
-
-        //To-do: Generar un mapa que me permita tener como clave los departamentos y como valor el total de empleados por departamento
-        Function<List<Empleado>, Map<String, Integer>> deptCount = l_empleados -> {
-            Map<String, Integer> total = new HashMap<>();
-            l_empleados.forEach(empleado -> {
-                total.merge(empleado.getDepartamento(), 1, Integer::sum);
-            });
-            return total;
+        EmpleadoFormat formatoFichaPersonal = e -> {
+            String estado = Boolean.TRUE.equals(e.getActive()) ? "Activo" : "Inactivo";
+            String egreso = (e.getFechaSal() != null) ? ("\nEgreso     : " + e.getFechaSal()) : "";
+            return "---- FICHA PERSONAL ----\n" +
+                    "Nombre     : " + e.getNombre() + " " + e.getApellido() + "\n" +
+                    "Género     : " + e.getGenero() + "\n" +
+                    "Departamento: " + e.getDepartamento() + "\n" +
+                    "Cargo      : " + e.getCargo() + "\n" +
+                    "Ingreso    : " + e.getFechaIng() + egreso + "\n" +
+                    "Estado     : " + estado + "\n" +
+                    String.format("Salario    : $%,.2f", e.getSalario()) + "\n" +
+                    "-------------------------";
         };
 
-        //To-do: Mostrar empleados por un consumer: Contratados en determinado mes
-        Consumer<List<Empleado>> empEnero = emps -> {
-            emps.forEach(empleado -> {
-                if(empleado.getFechaIng().getMonth() == Month.JANUARY){
-                    System.out.println(empleado);
-                }
-            });
-        };
+        Predicate<Empleado> activosSalarioMenor700 = e ->
+                Boolean.TRUE.equals(e.getActive()) &&
+                        e.getSalario().compareTo(BigDecimal.valueOf(700)) < 0;
 
-        //To-do: Uso de las funciones
-
-        //1. Predicate
-        System.out.println("Predicate resultado");
-        List<Empleado> infoEmp = new ArrayList<>();
-        empleados.forEach(empleado -> {
-            if(deptInfo.test(empleado)){
-                infoEmp.add(empleado);
+        System.out.println("Predicate: activos con salario < 700 USD");
+        List<Empleado> filtrados = new ArrayList<>();
+        for (Empleado e : empleados) {
+            if (activosSalarioMenor700.test(e)) {
+                filtrados.add(e);
             }
-        });
+        }
+        // 4) Function (criterio: 10 pts)
+        Function<List<Empleado>, Map<String, String>> deptToSupervisor = lista -> {
+            Map<String, String> mapa = new HashMap<>();
+            for (Empleado e : lista) {
+                String cargo = e.getCargo() == null ? "" : e.getCargo().toLowerCase(Locale.ROOT);
+                if (cargo.contains("supervisor")) {
+                    mapa.putIfAbsent(e.getDepartamento(), e.getNombre() + " " + e.getApellido());
+                }
+            }
+            return mapa;
+        };
 
-        System.out.println(infoEmp);
-        //2. Comparator
-        System.out.println("Comparator resultado");
-        List<Empleado> empleados1 = new ArrayList<>(List.copyOf(empleados));
-        empleados1.sort(porNombre);
-        System.out.println(empleados1);
+        System.out.println("Function: departamento -> supervisor");
+        Map<String, String> mapaSup = deptToSupervisor.apply(empleados);
+        for (Map.Entry<String, String> entry : mapaSup.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+        // 5) Consumer (criterio: 10 pts)
+        Consumer<List<Empleado>> imprimirInformatica = imprimirPorDepartamento("Informática");
+        Consumer<List<Empleado>> imprimirContabilidad = imprimirPorDepartamento("Contabilidad");
 
-        //3. Function
-        System.out.println("Function resultado");
-        Map<String, Integer> totalPorDept = deptCount.apply(empleados);
-        System.out.println(totalPorDept);
+        System.out.println("Consumer: empleados de Informática");
+        imprimirInformatica.accept(empleados);
 
-        //4. Consumer
-        System.out.println("Consumer resultado");
-        empEnero.accept(empleados);
+        System.out.println("Consumer: empleados de Contabilidad");
+        imprimirContabilidad.accept(empleados);
+        // 6) Comparator (criterio: 10 pts)
+        Collator collator = Collator.getInstance(new Locale("es", "ES"));
+        collator.setStrength(Collator.PRIMARY);
 
+        Comparator<Empleado> porApellido = (a, b) -> collator.compare(a.getApellido(), b.getApellido());
 
+        System.out.println("Comparator: orden por apellido (ascendente)");
+        List<Empleado> copiaOrdenada = new ArrayList<>(empleados);
+        copiaOrdenada.sort(porApellido);
+        for (Empleado e : copiaOrdenada) {
+            System.out.println(e);
+        }
+    }
+
+    private static Consumer<List<Empleado>> imprimirPorDepartamento(String departamento) {
+        return lista -> {
+            for (Empleado e : lista) {
+                if (departamento.equalsIgnoreCase(e.getDepartamento())) {
+                    System.out.println(e);
+                }
+            }
+        };
     }
 
     public static void loadEmpleados(List<Empleado> empleadoList){
@@ -87,9 +116,5 @@ public class Main {
         empleadoList.add(new Empleado("Cecilia", "Marín","F", "Informática", "Supervisora TI", new BigDecimal(2000), LocalDate.parse("2020-04-21")));
         empleadoList.add(new Empleado("Edison", "Cáceres","M", "Informática", "Desarrollador TI", new BigDecimal(1300), LocalDate.parse("2023-07-07")));
         empleadoList.add(new Empleado("María", "Silva", "F","Contabilidad", "Asistente Contable", new BigDecimal(900), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-09"), false));
-
     }
-
-
-
 }
