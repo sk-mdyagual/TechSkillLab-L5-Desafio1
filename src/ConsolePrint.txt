@@ -1,0 +1,81 @@
+
+== Predicate: activos con salario < 700 USD ==
+
+== Function: departamento -> supervisor ==
+Informática -> Cecilia Marín
+Contabilidad -> Camilo López
+Talento Humano -> Estefanía Mendoza
+
+== Consumer: empleados de Informática ==
+{nombre: 'Julián', apellido: 'Flores', genero: 'M', departamento: 'Informática', cargo: 'Soporte TI', salario: 800, fechaIng: 2023-11-01, fechaSal: null, isActive: true}
+
+{nombre: 'Camila', apellido: 'Mendoza', genero: 'F', departamento: 'Informática', cargo: 'Desarrollador UI/UX', salario: 1000, fechaIng: 2021-07-08, fechaSal: null, isActive: true}
+
+{nombre: 'Raúl', apellido: 'Echeverría', genero: 'M', departamento: 'Informática', cargo: 'Infraestructura TI', salario: 950, fechaIng: 2020-02-14, fechaSal: null, isActive: true}
+
+{nombre: 'Julie', apellido: 'Flores', genero: 'F', departamento: 'Informática', cargo: 'Desarrollador', salario: 1200, fechaIng: 2021-12-10, fechaSal: null, isActive: true}
+
+{nombre: 'José', apellido: 'Rodríguez', genero: 'M', departamento: 'Informática', cargo: 'Tester QA', salario: 1100, fechaIng: 2021-10-01, fechaSal: null, isActive: true}
+
+{nombre: 'Cecilia', apellido: 'Marín', genero: 'F', departamento: 'Informática', cargo: 'Supervisora TI', salario: 2000, fechaIng: 2020-04-21, fechaSal: null, isActive: true}
+
+{nombre: 'Edison', apellido: 'Cáceres', genero: 'M', departamento: 'Informática', cargo: 'Desarrollador TI', salario: 1300, fechaIng: 2023-07-07, fechaSal: null, isActive: true}
+
+
+== Consumer: empleados de Contabilidad ==
+{nombre: 'María', apellido: 'Rodríguez', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 700, fechaIng: 2021-04-01, fechaSal: null, isActive: true}
+
+{nombre: 'José', apellido: 'Albornoz', genero: 'M', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 800, fechaIng: 2020-08-15, fechaSal: 2023-05-01, isActive: false}
+
+{nombre: 'Camilo', apellido: 'López', genero: 'M', departamento: 'Contabilidad', cargo: 'Supervisor Contable', salario: 1500, fechaIng: 2020-04-11, fechaSal: null, isActive: true}
+
+{nombre: 'Manuel', apellido: 'Játiva', genero: 'M', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 850, fechaIng: 2023-06-03, fechaSal: null, isActive: true}
+
+{nombre: 'Melissa', apellido: 'Morocho', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 820, fechaIng: 2022-05-22, fechaSal: 2023-07-09, isActive: false}
+
+{nombre: 'Camila', apellido: 'Mendez', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Cuentas', salario: 860, fechaIng: 2020-10-01, fechaSal: null, isActive: true}
+
+{nombre: 'María', apellido: 'López', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 840, fechaIng: 2020-02-20, fechaSal: 2024-07-15, isActive: false}
+
+{nombre: 'María', apellido: 'Silva', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 900, fechaIng: 2021-11-15, fechaSal: 2022-08-09, isActive: false}
+
+
+== Comparator: orden por apellido (ascendente) ==
+{nombre: 'José', apellido: 'Albornoz', genero: 'M', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 800, fechaIng: 2020-08-15, fechaSal: 2023-05-01, isActive: false}
+
+{nombre: 'Edison', apellido: 'Cáceres', genero: 'M', departamento: 'Informática', cargo: 'Desarrollador TI', salario: 1300, fechaIng: 2023-07-07, fechaSal: null, isActive: true}
+
+{nombre: 'Raúl', apellido: 'Echeverría', genero: 'M', departamento: 'Informática', cargo: 'Infraestructura TI', salario: 950, fechaIng: 2020-02-14, fechaSal: null, isActive: true}
+
+{nombre: 'Julián', apellido: 'Flores', genero: 'M', departamento: 'Informática', cargo: 'Soporte TI', salario: 800, fechaIng: 2023-11-01, fechaSal: null, isActive: true}
+
+{nombre: 'Julie', apellido: 'Flores', genero: 'F', departamento: 'Informática', cargo: 'Desarrollador', salario: 1200, fechaIng: 2021-12-10, fechaSal: null, isActive: true}
+
+{nombre: 'Carlos', apellido: 'Franco', genero: 'M', departamento: 'Talento Humano', cargo: 'Reclutador', salario: 650, fechaIng: 2023-01-07, fechaSal: 2024-12-09, isActive: false}
+
+{nombre: 'Juan', apellido: 'Gutierrez', genero: 'M', departamento: 'Talento Humano', cargo: 'Reclutador', salario: 500, fechaIng: 2023-03-11, fechaSal: 2024-04-01, isActive: false}
+
+{nombre: 'Esteban', apellido: 'Gutierrez', genero: 'M', departamento: 'Talento Humano', cargo: 'Reclutador', salario: 700, fechaIng: 2023-04-01, fechaSal: null, isActive: true}
+
+{nombre: 'Manuel', apellido: 'Játiva', genero: 'M', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 850, fechaIng: 2023-06-03, fechaSal: null, isActive: true}
+
+{nombre: 'Camilo', apellido: 'López', genero: 'M', departamento: 'Contabilidad', cargo: 'Supervisor Contable', salario: 1500, fechaIng: 2020-04-11, fechaSal: null, isActive: true}
+
+{nombre: 'María', apellido: 'López', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 840, fechaIng: 2020-02-20, fechaSal: 2024-07-15, isActive: false}
+
+{nombre: 'Cecilia', apellido: 'Marín', genero: 'F', departamento: 'Informática', cargo: 'Supervisora TI', salario: 2000, fechaIng: 2020-04-21, fechaSal: null, isActive: true}
+
+{nombre: 'Camila', apellido: 'Mendez', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Cuentas', salario: 860, fechaIng: 2020-10-01, fechaSal: null, isActive: true}
+
+{nombre: 'Camila', apellido: 'Mendoza', genero: 'F', departamento: 'Informática', cargo: 'Desarrollador UI/UX', salario: 1000, fechaIng: 2021-07-08, fechaSal: null, isActive: true}
+
+{nombre: 'Estefanía', apellido: 'Mendoza', genero: 'F', departamento: 'Talento Humano', cargo: 'Supervisora TH', salario: 1600, fechaIng: 2021-09-21, fechaSal: null, isActive: true}
+
+{nombre: 'Melissa', apellido: 'Morocho', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 820, fechaIng: 2022-05-22, fechaSal: 2023-07-09, isActive: false}
+
+{nombre: 'María', apellido: 'Rodríguez', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 700, fechaIng: 2021-04-01, fechaSal: null, isActive: true}
+
+{nombre: 'José', apellido: 'Rodríguez', genero: 'M', departamento: 'Informática', cargo: 'Tester QA', salario: 1100, fechaIng: 2021-10-01, fechaSal: null, isActive: true}
+
+{nombre: 'María', apellido: 'Silva', genero: 'F', departamento: 'Contabilidad', cargo: 'Asistente Contable', salario: 900, fechaIng: 2021-11-15, fechaSal: 2022-08-09, isActive: false}
+
