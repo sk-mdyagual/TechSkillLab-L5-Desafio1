@@ -8,13 +8,82 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+@FunctionalInterface
+interface EmpleadoFormatter {
+    String format(Empleado empleado);
+}
+
+
+
+
 public class Main {
     public static void main(String[] args) {
         List<Empleado> empleados = new ArrayList<>();
         loadEmpleados(empleados);
 
+        // Interfaz personalizada
+        EmpleadoFormatter reporteNomina = e -> "Nómina: " + e.getNombre() + " " + e.getApellido() +
+                " | Cargo: " + e.getCargo() + " | Departamento: " + e.getDepartamento() + " | Salario: $" + e.getSalario();
+
+        EmpleadoFormatter fichaPersonal = e -> "Ficha Personal: Nombre completo: " + e.getNombre() + " " + e.getApellido() + " Género: " + e.getGenero() + " Departamento: " + e.getDepartamento() + " Cargo: " + e.getCargo() + " Fecha de ingreso: " + e.getFechaIng() + " Activo: " + e.getActive();
+
+        System.out.println(reporteNomina.format(empleados.get(0)));
+        System.out.println(fichaPersonal.format(empleados.get(0)));
+
+
+        Predicate<Empleado> activosConSalarioBajo = e -> Boolean.TRUE.equals(e.getActive()) && e.getSalario().compareTo(new BigDecimal(700)) < 0;
+        List<Empleado> resultadoPredicate = new ArrayList<>();
+        for (Empleado e : empleados) {
+            if (activosConSalarioBajo.test(e)) {
+                resultadoPredicate.add(e);
+            }
+        }
+        System.out.println("Empleados activos con salario < 700:");
+        for (Empleado e : resultadoPredicate) {
+            System.out.println(e);
+        }
+
+        // Function: mapa departamento → superior
+        Function<List<Empleado>, Map<String, Empleado>> superiorPorDept = lista -> {
+            Map<String, Empleado> mapa = new HashMap<>();
+            for (Empleado e : lista) {
+                String dept = e.getDepartamento();
+                if (!mapa.containsKey(dept) || e.getSalario().compareTo(mapa.get(dept).getSalario()) > 0) {
+                    mapa.put(dept, e);
+                }
+            }
+            return mapa;
+        };
+        Map<String, Empleado> superiores = superiorPorDept.apply(empleados);
+        System.out.println("Superiores por departamento:");
+        for (Map.Entry<String, Empleado> entry : superiores.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue().getNombre() + " " + entry.getValue().getApellido());
+        }
+
+        // Consumer: imprimir empleados de Informática
+        Consumer<List<Empleado>> imprimirInformaticos = lista -> {
+            System.out.println("Empleados del departamento Informática:");
+            for (Empleado e : lista) {
+                if ("Informática".equals(e.getDepartamento())) {
+                    System.out.println(e);
+                }
+            }
+        };
+        imprimirInformaticos.accept(empleados);
+
+        // Comparator: ordenar por apellido
+        Comparator<Empleado> porApellido = Comparator.comparing(Empleado::getApellido);
+        List<Empleado> empleadosOrdenados = new ArrayList<>(empleados);
+        empleadosOrdenados.sort(porApellido);
+        System.out.println("Empleados ordenados por apellido:");
+        for (Empleado e : empleadosOrdenados) {
+            System.out.println(e);
+        }
+        /*
+
         //To-do: Filtrar empleados por un atributo: departamento
         Predicate<Empleado> deptInfo = empleado -> empleado.getDepartamento().equals("Informática");
+
 
         //To-do: Ordenar empleados por un atributo: Nombre
         Comparator<Empleado> porNombre = Comparator.comparing(empleado -> empleado.getNombre());
@@ -63,7 +132,7 @@ public class Main {
         //4. Consumer
         System.out.println("Consumer resultado");
         empEnero.accept(empleados);
-
+         */
 
     }
 
