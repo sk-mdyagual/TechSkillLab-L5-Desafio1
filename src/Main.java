@@ -1,3 +1,4 @@
+import principles.interfaces.EmpFormat;
 import resources.Empleado;
 
 import java.math.BigDecimal;
@@ -48,12 +49,17 @@ public class Main {
             }
         });
 
+        empleados.stream().filter(deptInfo).forEach(System.out::println);
+
         System.out.println(infoEmp);
         //2. Comparator
         System.out.println("Comparator resultado");
         List<Empleado> empleados1 = new ArrayList<>(List.copyOf(empleados));
         empleados1.sort(porNombre);
         System.out.println(empleados1);
+
+        empleados1.stream().sorted(porNombre).forEach(System.out::println);
+
 
         //3. Function
         System.out.println("Function resultado");
@@ -63,6 +69,8 @@ public class Main {
         //4. Consumer
         System.out.println("Consumer resultado");
         empEnero.accept(empleados);
+
+        //To-do: Uso de la interfaz funcional EmpFormat
 
 
     }
