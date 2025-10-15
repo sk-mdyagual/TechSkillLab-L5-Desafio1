@@ -74,6 +74,58 @@ public class Main {
         for (Empleado e : empleados) {
             System.out.print(e);
         }
+        //To-do: Filtrar empleados por un atributo: departamento
+        Predicate<Empleado> deptInfo = empleado -> empleado.getDepartamento().equals("Informática");
+
+        //To-do: Ordenar empleados por un atributo: Nombre
+        Comparator<Empleado> porNombre = Comparator.comparing(empleado -> empleado.getNombre());
+
+        //To-do: Generar un mapa que me permita tener como clave los departamentos y como valor el total de empleados por departamento
+        Function<List<Empleado>, Map<String, Integer>> deptCount = l_empleados -> {
+            Map<String, Integer> total = new HashMap<>();
+            l_empleados.forEach(empleado -> {
+                total.merge(empleado.getDepartamento(), 1, Integer::sum);
+            });
+            return total;
+        };
+
+        //To-do: Mostrar empleados por un consumer: Contratados en determinado mes
+        Consumer<List<Empleado>> empEnero = emps -> {
+            emps.forEach(empleado -> {
+                if(empleado.getFechaIng().getMonth() == Month.JANUARY){
+                    System.out.println(empleado);
+                }
+            });
+        };
+
+        //To-do: Uso de las funciones
+
+        //1. Predicate
+        System.out.println("Predicate resultado");
+        List<Empleado> infoEmp = new ArrayList<>();
+        empleados.forEach(empleado -> {
+            if(deptInfo.test(empleado)){
+                infoEmp.add(empleado);
+            }
+        });
+
+        System.out.println(infoEmp);
+        //2. Comparator
+        System.out.println("Comparator resultado");
+        List<Empleado> empleados1 = new ArrayList<>(List.copyOf(empleados));
+        empleados1.sort(porNombre);
+        System.out.println(empleados1);
+
+        //3. Function
+        System.out.println("Function resultado");
+        Map<String, Integer> totalPorDept = deptCount.apply(empleados);
+        System.out.println(totalPorDept);
+
+        //4. Consumer
+        System.out.println("Consumer resultado");
+        empEnero.accept(empleados);
+
+
     }
 
     public static void loadEmpleados(List<Empleado> empleadoList){
